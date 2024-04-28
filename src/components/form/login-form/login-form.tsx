@@ -1,22 +1,36 @@
-import React, { PropsWithChildren } from 'react';
-import { LoginFormInterface } from '@/models/interfaces/form/login-form-interface.ts';
-import { FormProvider, useForm } from 'react-hook-form';
-import { UserEntityType } from '@/models/entities/user-entity';
-import { zodResolver } from '@hookform/resolvers/zod';
-import useLoginFormValidation from '@/components/form/login-form/login-form-validation.ts';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
+import { LoginEntityType } from '@/models/entities/login-entity.ts';
+import ControlledTextInput from '@/components/form/controlled/controlled-text-input.tsx';
+import { FormIdEnum } from '@/models/enums/formIdEnum.ts';
+import FormElement from '@/components/form/form-element.tsx';
 
-const LoginForm: React.FC<PropsWithChildren<LoginFormInterface>> = (props: PropsWithChildren<LoginFormInterface>) => {
-    const { children, defaultValues } = props;
+interface LoginFormInterface {
+    onSubmit: (values: LoginEntityType) => void;
+}
+const LoginForm: React.FC<LoginFormInterface> = ({ onSubmit }: LoginFormInterface) => {
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useFormContext<LoginEntityType>();
 
-    const userSchema = useLoginFormValidation();
-
-    const form = useForm<UserEntityType>({
-        values: defaultValues,
-        shouldUnregister: false,
-        resolver: zodResolver(userSchema),
-    });
-
-    return <FormProvider {...form}>{children}</FormProvider>;
+    return (
+        <form onSubmit={handleSubmit(onSubmit)} id={FormIdEnum.LOGIN}>
+            <div className="flex flex-col gap-4">
+                <FormElement label="email" errorMessage={errors.email}>
+                    <ControlledTextInput<LoginEntityType>
+                        control={control}
+                        name="email"
+                        placeholder="john.doe@gmail.com"
+                    />
+                </FormElement>
+                <FormElement label="password" errorMessage={errors.password}>
+                    <ControlledTextInput<LoginEntityType> control={control} name="password" type="password" />
+                </FormElement>
+            </div>
+        </form>
+    );
 };
 
 export default LoginForm;

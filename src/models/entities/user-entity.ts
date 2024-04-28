@@ -1,15 +1,18 @@
 class UserEntity {
-    public email: string;
+    public readonly email: string;
 
-    public password: string;
+    public readonly firstName: string;
 
-    constructor(email: string, password: string) {
+    public readonly lastName: string;
+
+    constructor(email: string, firstName: string, lastName: string) {
         this.email = email;
-        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    public static createFormValues(): UserEntity {
-        return new UserEntity('', '');
+    public static createFormValues(user: UserEntityType | undefined): UserEntity {
+        return new UserEntity(user?.email || '', user?.firstName || '', user?.lastName || '');
     }
 }
 
