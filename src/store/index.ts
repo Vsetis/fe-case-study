@@ -1,10 +1,12 @@
 import { atom, useAtom } from 'jotai';
 
 type TicketType = {
-    id: string;
+    seatId: string;
+    ticketTypeId: string;
     seat: number;
     row: number;
     price: number;
+    currencyIso: string;
 };
 
 export type UserType = {
@@ -13,8 +15,15 @@ export type UserType = {
     email: string;
 };
 
+type AlertType = {
+    message: string;
+    type?: 'success' | 'error';
+};
+
 const userAtom = atom<UserType | undefined>(undefined);
 const ticketAtom = atom<TicketType[]>([]);
+const alertAtom = atom<AlertType>({ message: '' } as AlertType);
+
 const useUserAtom = () => {
     const [user, setUser] = useAtom(userAtom);
 
@@ -27,4 +36,25 @@ const useTicketAtom = () => {
     return { tickets, setTickets };
 };
 
-export { useUserAtom, useTicketAtom };
+const useAlertAtom = () => {
+    const [alert, setAlert] = useAtom(alertAtom);
+
+    const toast = {
+        success: (message: string) => {
+            setAlert({ message, type: 'success' });
+            setTimeout(() => {
+                setAlert({ message: '' });
+            }, 2000);
+        },
+        error: (message: string) => {
+            setAlert({ message, type: 'error' });
+            setTimeout(() => {
+                setAlert({ message: '' });
+            }, 2000);
+        },
+    };
+
+    return { alert, toast };
+};
+
+export { useUserAtom, useTicketAtom, useAlertAtom };

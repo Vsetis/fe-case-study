@@ -28,15 +28,10 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     plugins: ['react-refresh', "prettier"],
     rules: {
-        "react/jsx-filename-extension": ["warn", {extensions: [".tsx"]}],
         "prettier/prettier": "warn",
-        "import/extensions": [
-            "error",
-            "ignorePackages",
-            {
-                "ts": "never",
-                "tsx": "never",
-            },
-        ],
+       "react-refresh/only-export-components": [
+           "warn",
+           {allowConstantExport: true}
+       ]
     },
 }

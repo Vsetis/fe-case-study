@@ -4,7 +4,10 @@ import paths from './paths';
 import HomePage from '@/pages/home.tsx';
 import Layout from '@/components/layout';
 import EventsPage from '@/pages/events.tsx';
-import App from '@/App.tsx';
+import Event from '@/pages/event.tsx';
+import Login from '@/pages/login.tsx';
+import PageNotFound from '@/pages/404.tsx';
+import Checkout from '@/pages/checkout.tsx';
 
 const Routes: React.FC = () => {
     return (
@@ -31,28 +34,36 @@ const Routes: React.FC = () => {
                         path={paths.eventInfo.path}
                         element={
                             <Layout>
-                                <App />
+                                <Event />
                             </Layout>
                         }
                     />
                 </Route>
                 <Route
-                    path={paths.login.path}
+                    path={paths.checkout.path}
                     element={
                         <Layout>
-                            <>Login</>
+                            <Checkout />
                         </Layout>
                     }
                 />
                 <Route
-                    path={paths.register.path}
+                    path={paths.login.path}
                     element={
                         <Layout>
-                            <>Register</>
+                            <Login />
                         </Layout>
                     }
                 />
-                <Route path="*" element={<Navigate to={paths.notFound.path} replace />} />
+                <Route
+                    path="*"
+                    element={
+                        <>
+                            <Navigate to={paths.notFound.path} replace />
+                            <PageNotFound />
+                        </>
+                    }
+                />
             </ReactRoutes>
         </BrowserRouter>
     );
