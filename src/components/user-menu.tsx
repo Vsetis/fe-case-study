@@ -30,7 +30,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ user }: UserMenuProps) => {
 
     return (
         <>
-            {' '}
             {user ? (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -62,10 +61,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ user }: UserMenuProps) => {
                 </DropdownMenu>
             ) : (
                 <div className="flex gap-4">
-                    <Button onClick={() => navigate(paths.register.path)}>Register</Button>
-                    <Button onClick={() => navigate(paths.login.path)} variant="secondary">
-                        Login
-                    </Button>
+                    <Button onClick={() => navigate(paths.login.path)}>Login</Button>
                 </div>
             )}
         </>

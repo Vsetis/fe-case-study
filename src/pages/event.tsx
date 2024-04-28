@@ -7,15 +7,20 @@ import { TrashIcon } from '@radix-ui/react-icons';
 import Seats from '@/components/seats.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import paths from '@/routes/paths.ts';
+import { useQueryClient } from '@tanstack/react-query';
+import { GetEventInterface } from '@/models/interfaces/endpoints/get-event.ts';
+import EventInfo from '@/components/event-info.tsx';
+import { IconX } from '@tabler/icons-react';
 
-function App() {
+function Event() {
     const { eventId } = useParams();
+    const queryClient = useQueryClient();
     const { tickets, setTickets } = useTicketAtom();
     const [isOpen, setIsOpen] = useState(false);
 
     const navigate = useNavigate();
 
-    const { data: event, isLoading } = useGetEventApi();
+    const event: GetEventInterface | undefined = queryClient.getQueryData(['events']);
 
     useEffect(() => {
         if (tickets.length === 0) {
@@ -24,36 +29,17 @@ function App() {
     }, [setIsOpen, tickets]);
 
     useEffect(() => {
-        if (eventId !== event?.eventId && !isLoading) {
+        if (eventId !== event?.eventId) {
             navigate(paths.event.generate());
         }
-    }, [navigate, eventId, event, isLoading]);
+    }, [navigate, eventId, event]);
 
-    if (!event) return null;
+    if (!event || !eventId) return null;
 
     return (
         <>
-            {/* inner content */}
-            <div className="max-w-screen-lg m-auto p-4 flex items-start grow gap-3 w-full">
-                {/* seating card */}
-                <Seats eventId={event.eventId} />
+            <EventInfo event={event} />
 
-                {/* event info */}
-                <aside className="w-full max-w-sm bg-white rounded-md shadow-sm p-3 flex flex-col gap-2">
-                    <img
-                        className="object-cover object-center rounded-md"
-                        width={360}
-                        height={180}
-                        src={event.headerImageUrl}
-                        alt={event.namePub}
-                    />
-                    <h1 className="text-xl text-zinc-900 font-semibold">{event.namePub}</h1>
-                    <p className="text-sm text-zinc-500">{event?.description}</p>
-                    <Button variant="secondary" disabled>
-                        Add to calendar
-                    </Button>
-                </aside>
-            </div>
             {/* bottom cart affix (wrapper) */}
             <nav className="sticky bottom-0 left-0 right-0 bg-white border-t border-zinc-200 flex justify-center">
                 {/* inner content */}
@@ -77,26 +63,33 @@ function App() {
                         </ModalTrigger>
 
                         <ModalContent>
-                            <div className="p-4">
-                                <h1 className="text-xl font-medium mb-4">checkout</h1>
+                            <div className="p-4 overflow-auto max-h-[60vh]">
+                                <div className="flex justify-between h-max mb-2">
+                                    <h1 className="text-2xl font-medium mb-4">checkout</h1>
+                                    <ModalClose>
+                                        <IconX className="size-8" />
+                                    </ModalClose>
+                                </div>
                                 <div className="flex flex-col gap-4">
                                     {tickets.map((ticket) => (
-                                        <div key={ticket.id} className="flex justify-between items-center">
+                                        <div key={ticket.seatId} className="flex justify-between items-center">
                                             <span>
-                                                {ticket.row} - {ticket.seat}
+                                                Seat {ticket.seat} | Row {ticket.row}
                                             </span>
-                                            <span>
-                                                {ticket.price} {event.currencyIso}
-                                            </span>
-                                            <Button
-                                                onClick={() =>
-                                                    setTickets((prev) => prev.filter((t) => t.id !== ticket.id))
-                                                }
-                                                size="icon"
-                                                variant="destructive"
-                                            >
-                                                <TrashIcon className="size-5 " />
-                                            </Button>
+                                            <div className="flex items-center gap-4">
+                                                <span className="font-medium text-lg">
+                                                    {ticket.price} {ticket.currencyIso}
+                                                </span>
+
+                                                <TrashIcon
+                                                    onClick={() =>
+                                                        setTickets((prev) =>
+                                                            prev.filter((t) => t.seatId !== ticket.seatId)
+                                                        )
+                                                    }
+                                                    className="size-6 text-red-500 trnasition-all hover:bg-red-200 cursor-pointer rounded-md"
+                                                />
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
@@ -105,7 +98,12 @@ function App() {
                                 <ModalClose asChild={true}>
                                     <Button variant="destructive">Cancel</Button>
                                 </ModalClose>
-                                <Button variant="default">Continue</Button>
+                                <Button
+                                    onClick={() => navigate(paths.checkout.generate({ eventId }))}
+                                    variant="default"
+                                >
+                                    Continue
+                                </Button>
                             </div>
                         </ModalContent>
                     </Modal>
@@ -115,4 +113,4 @@ function App() {
     );
 }
 
-export default App;
+export default Event;

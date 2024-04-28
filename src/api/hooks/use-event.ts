@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { GET_EVENT_TICKETS_URL, GET_EVENT_URL } from '@/constants/endpoints.ts';
 import { GetEventInterface } from '@/models/interfaces/endpoints/get-event.ts';
 import { GetTicketsInterface } from '@/models/interfaces/endpoints/get-tickets.ts';
@@ -19,8 +19,11 @@ const useGetEventApi = () =>
         queryKey: ['events'] as const,
     });
 
-const useGetEventTicketsApi = (eventId: string) =>
-    useQuery<GetTicketsInterface>({
+const useGetEnsureTicketsApi = async (eventId: string) => {
+    const queryClient = useQueryClient();
+
+    const data = await queryClient.ensureQueryData<GetTicketsInterface>({
+        queryKey: ['event-tickets'],
         queryFn: async () => {
             const response = await fetch(`${GET_EVENT_TICKETS_URL}?eventId=${eventId}`);
             if (!response.ok) {
@@ -28,7 +31,11 @@ const useGetEventTicketsApi = (eventId: string) =>
             }
             return response.json();
         },
-        queryKey: ['event-tickets'] as const,
     });
 
-export { useGetEventApi, useGetEventTicketsApi };
+    const isFetching = queryClient.isFetching({ queryKey: ['event-tickets'] });
+
+    return { data, isFetching };
+};
+
+export { useGetEventApi, useGetEnsureTicketsApi };
