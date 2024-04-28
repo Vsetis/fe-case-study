@@ -3,9 +3,11 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
+import { ButtonHTMLAttributes } from 'react';
+import { IconLoader } from '@tabler/icons-react';
 
 const buttonVariants = cva(
-    'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-zinc-950 dark:focus-visible:ring-zinc-300',
+    'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-zinc-950 dark:focus-visible:ring-zinc-300 gap-2',
     {
         variants: {
             variant: {
@@ -38,10 +40,12 @@ export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
         VariantProps<typeof buttonVariants> {
     asChild?: boolean;
+    form?: ButtonHTMLAttributes<HTMLButtonElement>['form'];
+    isLoading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ className, variant, size, asChild = false, ...props }, ref) => {
+    ({ className, isLoading, disabled, variant, form, size, asChild = false, children, ...props }, ref) => {
         const Comp = asChild ? Slot : 'button';
         return (
             <Comp
@@ -52,9 +56,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                         className,
                     })
                 )}
+                form={form}
+                disabled={isLoading || disabled}
                 ref={ref}
                 {...props}
-            />
+            >
+                {isLoading ? (
+                    <>
+                        Loggin in
+                        <IconLoader className="animate-spin" />
+                    </>
+                ) : (
+                    children
+                )}
+            </Comp>
         );
     }
 );
