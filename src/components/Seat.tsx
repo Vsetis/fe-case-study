@@ -84,5 +84,6 @@ const Seat = React.forwardRef<HTMLDivElement, SeatProps>((props, ref) => {
         </Popover>
     );
 });
+Seat.displayName = 'Seat';
 
 export default Seat;
