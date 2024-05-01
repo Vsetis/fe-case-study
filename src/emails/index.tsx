@@ -12,7 +12,7 @@ interface OrderEmailProps {
     }[];
 }
 
-const BASE_URL = 'http://localhost:5173/';
+const BASE_URL = 'https://fe-case-study-five.vercel.app/';
 
 export default function Email(props: OrderEmailProps) {
     const { tickets, firstName, lastName, currencyISO } = props;
