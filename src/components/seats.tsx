@@ -1,6 +1,6 @@
-import { Seat } from '@/components/seat.tsx';
 import { useTicketAtom } from '@/store';
 import { GetTicketsInterface } from '@/models/interfaces/endpoints/get-tickets.ts';
+import Seat from '@/components/seat.tsx';
 
 interface SeatsProps {
     currencyIso: string;

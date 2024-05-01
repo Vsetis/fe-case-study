@@ -27,7 +27,7 @@ const SeatDetails = ({ seatData, row, ticketType }: { seatData: SeatType; row: n
     );
 };
 
-export const Seat = React.forwardRef<HTMLDivElement, SeatProps>((props, ref) => {
+const Seat = React.forwardRef<HTMLDivElement, SeatProps>((props, ref) => {
     const { seatData, row, ticketType, isInCart, currencyIso, className } = props;
 
     const { tickets, setTickets } = useTicketAtom();
@@ -84,3 +84,5 @@ export const Seat = React.forwardRef<HTMLDivElement, SeatProps>((props, ref) => 
         </Popover>
     );
 });
+
+export default Seat;
