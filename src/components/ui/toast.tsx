@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ToastPrimitive from '@radix-ui/react-toast';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAlertAtom } from '@/store';
 
 const ToastProvider = ToastPrimitive.Provider;
@@ -20,7 +20,7 @@ const ToastDemo: React.FC = () => {
     return (
         <>
             <ToastPrimitive.Root
-                className={`${alert.type === 'success' ? 'bg-green-300' : 'bg-red-300'} bg-white rounded-md p-4 border`}
+                className={`${alert.type === 'success' ? 'bg-green-300' : 'bg-red-300'}  rounded-md p-4 border`}
                 open={open}
             >
                 <ToastPrimitive.Title>{alert.message}</ToastPrimitive.Title>

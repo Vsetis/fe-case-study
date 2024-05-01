@@ -22,7 +22,6 @@ module.exports = {
     parserOptions: {
         "ecmaVersion": "latest",
         "sourceType": "module",
-        "project": "./tsconfig.json",
     },
     ignorePatterns: ['dist', '.eslintrc.cjs'],
     parser: '@typescript-eslint/parser',

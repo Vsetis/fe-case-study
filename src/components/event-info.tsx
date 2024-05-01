@@ -29,10 +29,10 @@ const EventInfo: React.FC<EventInfoInterface> = (props: EventInfoInterface) => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [ensureData]);
 
     return (
-        <div className="max-w-screen-lg  flex w-full mx-auto justify-between grow mt-8 gap-8">
+        <div className="max-w-screen-lg  flex flex-col md:flex-row w-full mx-auto justify-between grow md:mt-8 gap-8 p-2 md:p-0">
             {!isLoading && memoizedTickets ? (
                 <>
                     <Seats currencyIso={event.currencyIso} tickets={memoizedTickets} />

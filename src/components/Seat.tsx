@@ -4,6 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils.ts';
 import { SeatType, TicketType } from '@/models/interfaces/endpoints/get-tickets';
 import { useTicketAtom } from '@/store';
+import { IconArmchair } from '@tabler/icons-react';
 
 interface SeatProps extends React.HTMLAttributes<HTMLElement> {
     seatData: SeatType;
@@ -15,11 +16,13 @@ interface SeatProps extends React.HTMLAttributes<HTMLElement> {
 
 const SeatDetails = ({ seatData, row, ticketType }: { seatData: SeatType; row: number; ticketType: TicketType }) => {
     return (
-        <div className="flex flex-col gap-2 pb-2">
-            <span className="text-sm font-medium">Row {row}</span>
-            <span className="text-sm font-medium">Seat {seatData.place}</span>
-            <span className="text-sm font-medium"> {ticketType.name}</span>
-            <span className="text-sm font-medium">Price: {ticketType.price} Kč</span>
+        <div className="flex justify-between">
+            <div className="flex flex-col gap-2 mb-4">
+                <span className="text-sm font-medium">{`Seat ${seatData.place} | Row ${row} `}</span>
+                <span className="text-sm font-medium"> {ticketType.name}</span>
+                <span className="text-lg font-medium">Price: {ticketType.price} Kč</span>
+            </div>
+            <IconArmchair className="size-10" />
         </div>
     );
 };
@@ -48,7 +51,7 @@ export const Seat = React.forwardRef<HTMLDivElement, SeatProps>((props, ref) => 
                     {tickets.find((t) => t.seatId === seatData.seatId) ? (
                         <Button
                             onClick={() =>
-                                setTickets((prev) => prev.filter((ticktet) => ticktet.seatId !== seatData.seatId))
+                                setTickets((prev) => prev.filter((ticket) => ticket.seatId !== seatData.seatId))
                             }
                             variant="destructive"
                             size="sm"

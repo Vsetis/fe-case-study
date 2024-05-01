@@ -1,10 +1,8 @@
 import { Button } from '@/components/ui/button.tsx';
-import { useGetEventApi } from '@/api/hooks/use-event.ts';
 import { useEffect, useState } from 'react';
 import { useTicketAtom } from '@/store';
 import { Modal, ModalClose, ModalContent, ModalTrigger } from '@/components/ui/modal.tsx';
 import { TrashIcon } from '@radix-ui/react-icons';
-import Seats from '@/components/seats.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import paths from '@/routes/paths.ts';
 import { useQueryClient } from '@tanstack/react-query';

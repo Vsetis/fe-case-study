@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGetEventApi } from '@/api/hooks/use-event.ts';
 import EventCard from '@/components/event-card.tsx';
 import EventCardLoading from '@/components/event-card-loading.tsx';
@@ -12,7 +11,7 @@ function EventsPage() {
     if (!event && !isLoading) return null;
 
     return (
-        <div className="max-w-screen-lg m-auto w-full grid grid-cols-3 grow mt-8 gap-8">
+        <div className="max-w-screen-lg m-auto w-full grid grid-cols-1 md:grid-cols-3 grow mt-8 gap-8 p-4">
             {!isLoading && event ? (
                 <EventCard
                     key={event.eventId}

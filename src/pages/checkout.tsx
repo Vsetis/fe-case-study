@@ -9,6 +9,10 @@ import paths from '@/routes/paths.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { FormIdEnum } from '@/models/enums/formIdEnum.ts';
 import { TrashIcon } from '@radix-ui/react-icons';
+import Email from '../emails';
+import { Resend } from 'resend';
+
+const resend = new Resend('re_123456789');
 
 function Checkout() {
     const { eventId } = useParams();
@@ -30,6 +34,23 @@ function Checkout() {
                         })),
                         eventId,
                     });
+                    await resend.emails.send({
+                        from: import.meta.env.VITE_EMAIL,
+                        to: user?.email || values.email,
+                        subject: 'Order confirmation',
+                        react: (
+                            <Email
+                                firstName={user?.firstName || values.firstName}
+                                lastName={user?.lastName || values.lastName}
+                                currencyISO={'CZK'}
+                                tickets={tickets.map((ticket) => ({
+                                    seat: ticket.seat,
+                                    row: ticket.row,
+                                    price: ticket.price,
+                                }))}
+                            />
+                        ),
+                    });
                     setTickets([]);
                     toast.success('Order, succesful!');
                 } catch (e) {
@@ -37,19 +58,22 @@ function Checkout() {
                 }
             }
         },
-        [checkout, tickets, user, toast, eventId]
+        [checkout, tickets, user, toast, eventId, setTickets]
     );
 
     useEffect(() => {
-        if (!eventId || tickets.length <= 0) {
+        if (!eventId) {
             navigate(paths.event.path);
         }
-    }, [eventId, tickets, navigate]);
+    }, [eventId, navigate]);
 
     if (checkout.isSuccess) {
         return (
-            <div className="max-w-xl w-full flex flex-col grow mx-auto mt-32">
-                <h1 className="text-center text-5xl font-medium mb-8">We've sent you an email with confirmation!</h1>
+            <div className="max-w-xl w-full flex flex-col grow mx-auto mt-32 text-center">
+                <h1 className=" text-5xl font-medium mb-4">Thanks for your order!</h1>
+                <p className="text-lg font-medium mb-8">
+                    We've sent you an email with order confirmation within 5 minutes.
+                </p>
                 <Button onClick={() => navigate(paths.home.path)} className="w-max mx-auto">
                     Back to the home
                 </Button>
@@ -95,9 +119,17 @@ function Checkout() {
                     </Button>
                 </div>
             ) : (
-                <Button isLoading={checkout.isPending} disabled={checkout.isPending} onClick={() => handleSubmit(user)}>
-                    Checkout
-                </Button>
+                <div>
+                    <p className="font-medium text-lg mb-1">{`Name: ${user.firstName} ${user.lastName}`}</p>
+                    <p className="font-medium text-lg mb-4">{`Email: ${user.email}`}</p>
+                    <Button
+                        isLoading={checkout.isPending}
+                        disabled={checkout.isPending}
+                        onClick={() => handleSubmit(user)}
+                    >
+                        Checkout
+                    </Button>
+                </div>
             )}
         </div>
     );

@@ -26,7 +26,7 @@ function Login() {
                 toast.error('Login failed');
             }
         },
-        [toast, login]
+        [toast, login, navigate]
     );
 
     useEffect(() => {
