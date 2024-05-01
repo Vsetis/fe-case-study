@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Seats from '@/components/seats.tsx';
+import Seats from '@/components/seat/seats.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { GetEventInterface } from '@/models/interfaces/endpoints/get-event.ts';
 import { GetTicketsInterface } from '@/models/interfaces/endpoints/get-tickets.ts';

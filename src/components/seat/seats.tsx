@@ -1,6 +1,6 @@
 import { useTicketAtom } from '@/store';
 import { GetTicketsInterface } from '@/models/interfaces/endpoints/get-tickets.ts';
-import Seat from '@/components/seat.tsx';
+import Seattttt from '@/components/seat/seat.tsx';
 
 interface SeatsProps {
     currencyIso: string;
@@ -22,7 +22,7 @@ const Seats = ({ currencyIso, tickets }: SeatsProps) => {
                     <span className="text-xs font-semibold text-black">{row.seatRow}.</span>
                     {row.seats
                         .map((seat, j) => (
-                            <Seat
+                            <Seattttt
                                 key={j}
                                 currencyIso={currencyIso}
                                 seatData={seat}

@@ -1,6 +1,6 @@
 import { useGetEventApi } from '@/api/hooks/use-event.ts';
-import EventCard from '@/components/event-card.tsx';
-import EventCardLoading from '@/components/event-card-loading.tsx';
+import EventCard from '@/components/event-card/event-card.tsx';
+import EventCardLoading from '@/components/event-card/event-card-loading.tsx';
 import { useNavigate } from 'react-router-dom';
 import paths from '@/routes/paths.ts';
 

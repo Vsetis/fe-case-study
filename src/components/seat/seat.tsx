@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 import { cn } from '@/lib/utils.ts';
-import { SeatType, TicketType } from '@/models/interfaces/endpoints/get-tickets';
+import { SeatType, TicketType } from '@/models/interfaces/endpoints/get-tickets.ts';
 import { useTicketAtom } from '@/store';
 import { IconArmchair } from '@tabler/icons-react';
 
