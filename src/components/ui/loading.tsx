@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Loading = () => {
+const Loading: React.FC = () => {
     return (
         <div className="w-full flex gap-8">
             <div className="bg-zinc-300 animate-pulse w-full" />
