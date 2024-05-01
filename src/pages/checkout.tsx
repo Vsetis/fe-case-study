@@ -14,6 +14,8 @@ import { Resend } from 'resend';
 
 const resend = new Resend(import.meta.env.VITE_RESEND);
 
+console.log(import.meta.env.VITE_RESEND);
+
 function Checkout() {
     const { eventId } = useParams();
     const { user } = useUserAtom();

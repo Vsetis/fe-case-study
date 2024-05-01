@@ -15,7 +15,7 @@ const OrderForm: React.FC<OrderFormInterface> = ({ onSubmit }: OrderFormInterfac
         control,
         formState: { errors },
     } = useFormContext<UserEntityType>();
-    console.log(errors);
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} id={FormIdEnum.ORDER}>
             <div className="flex flex-col gap-4">
