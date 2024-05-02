@@ -36,7 +36,9 @@ function Event() {
 
     return (
         <>
-            <EventInfo event={event} />
+            <div className="mt-16 md:mt-0">
+                <EventInfo event={event} />
+            </div>
 
             {/* bottom cart affix (wrapper) */}
             <nav className="sticky bottom-0 left-0 right-0 bg-white border-t border-zinc-200 flex justify-center">

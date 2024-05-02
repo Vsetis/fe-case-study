@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
     const [isVisible, setVisible] = useState(false);
 
     return (
-        <nav className="sticky top-0 left-0 right-0 bg-white md:border-b border-zinc-200">
+        <nav className="fixed md:sticky  top-0 left-0 right-0 bg-white md:border-b border-zinc-200">
             <div className="relative max-w-screen-lg p-2 grow flex flex-col md:flex-row justify-between md:gap-12 mx-auto">
                 <div className="flex w-full md:w-max items-center justify-between">
                     <Button variant="outline" size="icon" onClick={() => handleNavigate(NavbarItemsEnum.HOME)}>

@@ -1,19 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
-import { UserEntityType } from '@/models/entities/user-entity.ts';
 import { GET_ORDER_URL } from '@/constants/endpoints.ts';
-
-interface DataInterface {
-    user: UserEntityType;
-    tickets: {
-        ticketTypeId: string;
-        seatId: string;
-    }[];
-    eventId: string;
-}
+import { PostOrderInterface } from '@/models/interfaces/endpoints/post-order.ts';
 
 const useCheckoutApi = () =>
     useMutation({
-        mutationFn: async (data: DataInterface) => {
+        mutationFn: async (data: PostOrderInterface) => {
             const response = await fetch(GET_ORDER_URL, {
                 method: 'POST',
                 headers: {
@@ -27,13 +18,6 @@ const useCheckoutApi = () =>
             }
 
             return response.json();
-        },
-        onSuccess: () => {
-            // todo alert
-        },
-        onError: (error) => {
-            // todo alert
-            console.error(error);
         },
     });
 

@@ -1,12 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
 import { GET_AUTH_URL } from '@/constants/endpoints.ts';
 import { useUserAtom } from '@/store';
+import { PostAuthInterface } from '@/models/interfaces/endpoints/post-auth.ts';
 
 const useAuthApi = () => {
     const { setUser } = useUserAtom();
 
     return useMutation({
-        mutationFn: async (data: { email: string; password: string }) => {
+        mutationFn: async (data: PostAuthInterface) => {
             const response = await fetch(GET_AUTH_URL, {
                 method: 'POST',
                 headers: {
@@ -29,7 +30,7 @@ const useAuthApi = () => {
             });
         },
         onError: (error) => {
-            console.error(error);
+            throw new Error(error.message);
         },
     });
 };

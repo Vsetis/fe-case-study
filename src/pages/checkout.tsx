@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAlertAtom, useTicketAtom, useUserAtom } from '@/store';
 import OrderFormContext from '@/components/form/order-form/order-form-context.tsx';
@@ -9,20 +9,28 @@ import paths from '@/routes/paths.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { FormIdEnum } from '@/models/enums/formIdEnum.ts';
 import { TrashIcon } from '@radix-ui/react-icons';
-import Email from '../emails';
-import { Resend } from 'resend';
+import Email from '../../emails';
+import { TicketInterface } from '@/models/interfaces/storage/ticket-interface.ts';
 
-const resend = new Resend(import.meta.env.VITE_RESEND);
-
-console.log(import.meta.env.VITE_RESEND);
+type EmailType = {
+    firstName: string;
+    lastName: string;
+    currencyISO: string;
+    tickets: TicketInterface[];
+};
 
 function Checkout() {
     const { eventId } = useParams();
     const { user } = useUserAtom();
     const { tickets, setTickets } = useTicketAtom();
     const { toast } = useAlertAtom();
-    const checkout = useCheckoutApi();
+
     const navigate = useNavigate();
+
+    const [email, setEmail] = useState<EmailType | undefined>(undefined);
+    const [emailIsVisible, setEmailIsVisible] = useState(false);
+
+    const checkout = useCheckoutApi();
 
     const handleSubmit = useCallback(
         async (values: UserEntityType) => {
@@ -36,22 +44,11 @@ function Checkout() {
                         })),
                         eventId,
                     });
-                    await resend.emails.send({
-                        from: import.meta.env.VITE_EMAIL,
-                        to: user?.email || values.email,
-                        subject: 'Order confirmation',
-                        react: (
-                            <Email
-                                firstName={user?.firstName || values.firstName}
-                                lastName={user?.lastName || values.lastName}
-                                currencyISO={'CZK'}
-                                tickets={tickets.map((ticket) => ({
-                                    seat: ticket.seat,
-                                    row: ticket.row,
-                                    price: ticket.price,
-                                }))}
-                            />
-                        ),
+                    setEmail({
+                        firstName: user?.firstName || values.firstName,
+                        lastName: user?.lastName || values.lastName,
+                        currencyISO: tickets[0].currencyIso,
+                        tickets,
                     });
                     setTickets([]);
                     toast.success('Order, succesful!');
@@ -64,21 +61,37 @@ function Checkout() {
     );
 
     useEffect(() => {
-        if (!eventId) {
+        if (!eventId || tickets.length <= 0) {
             navigate(paths.event.path);
         }
     }, [eventId, navigate]);
 
     if (checkout.isSuccess) {
         return (
-            <div className="max-w-xl w-full flex flex-col grow mx-auto mt-32 text-center">
-                <h1 className=" text-5xl font-medium mb-4">Thanks for your order!</h1>
-                <p className="text-lg font-medium mb-8">
-                    We've sent you an email with order confirmation within 5 minutes.
-                </p>
-                <Button onClick={() => navigate(paths.home.path)} className="w-max mx-auto">
-                    Back to the home
-                </Button>
+            <div className="max-w-xl w-full flex flex-col grow mx-auto  text-center overflow-hidden h-[70vh]">
+                {emailIsVisible ? (
+                    <div>
+                        <Button className="w-max mx-auto my-4" onClick={() => setEmailIsVisible(false)}>
+                            Hide email preview
+                        </Button>
+                        {email && <Email {...email} />}
+                    </div>
+                ) : (
+                    <>
+                        <h1 className=" text-5xl font-medium mb-4 mt-32">Thanks for your order!</h1>
+                        <p className="text-lg font-medium mb-8">
+                            We've sent you an email with order confirmation within 5 minutes.
+                        </p>
+                        <div className="flex gap-4 w-max mx-auto">
+                            <Button className="w-max mx-auto" onClick={() => navigate(paths.home.path)}>
+                                Back to the home
+                            </Button>
+                            <Button className="w-max mx-auto" onClick={() => setEmailIsVisible(true)}>
+                                Show email preview
+                            </Button>
+                        </div>
+                    </>
+                )}
             </div>
         );
     }
@@ -96,7 +109,6 @@ function Checkout() {
                             <span className="font-medium text-lg">
                                 {ticket.price} {ticket.currencyIso}
                             </span>
-
                             <TrashIcon
                                 onClick={() => setTickets((prev) => prev.filter((t) => t.seatId !== ticket.seatId))}
                                 className="size-6 text-red-500 trnasition-all hover:bg-red-200 cursor-pointer rounded-md"
@@ -125,6 +137,7 @@ function Checkout() {
                     <p className="font-medium text-lg mb-1">{`Name: ${user.firstName} ${user.lastName}`}</p>
                     <p className="font-medium text-lg mb-4">{`Email: ${user.email}`}</p>
                     <Button
+                        className="w-full"
                         isLoading={checkout.isPending}
                         disabled={checkout.isPending}
                         onClick={() => handleSubmit(user)}

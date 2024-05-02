@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button.tsx';
 import { useNavigate } from 'react-router-dom';
 import paths from '@/routes/paths.ts';
 import video from '@/assets/event-video.mp4';
-
 function HomePage() {
     const navigate = useNavigate();
 

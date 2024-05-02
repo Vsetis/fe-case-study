@@ -1,28 +1,11 @@
 import { atom, useAtom } from 'jotai';
+import { TicketInterface } from '@/models/interfaces/storage/ticket-interface.ts';
+import { AlertInterface } from '@/models/interfaces/storage/alert-interface.ts';
+import { UserInterface } from '@/models/interfaces/storage/user-interface.ts';
 
-type TicketType = {
-    seatId: string;
-    ticketTypeId: string;
-    seat: number;
-    row: number;
-    price: number;
-    currencyIso: string;
-};
-
-export type UserType = {
-    firstName: string;
-    lastName: string;
-    email: string;
-};
-
-type AlertType = {
-    message: string;
-    type?: 'success' | 'error';
-};
-
-const userAtom = atom<UserType | undefined>(undefined);
-const ticketAtom = atom<TicketType[]>([]);
-const alertAtom = atom<AlertType>({ message: '' } as AlertType);
+const userAtom = atom<UserInterface | undefined>(undefined);
+const ticketAtom = atom<TicketInterface[]>([]);
+const alertAtom = atom<AlertInterface>({ message: '' } as AlertInterface);
 
 const useUserAtom = () => {
     const [user, setUser] = useAtom(userAtom);

@@ -36,7 +36,7 @@ function Login() {
     }, [location.pathname, navigate, user]);
 
     return (
-        <div className="max-w-md w-full m-auto">
+        <div className="max-w-md w-full m-auto px-4 md:px-0">
             <h1 className="text-3xl font-medium mb-8">Login to Event Portal</h1>
             <div className="mb-8">
                 <LoginFormContext defaultValues={LoginEntity.createFormValues()}>

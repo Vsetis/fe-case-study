@@ -11,7 +11,7 @@ function EventsPage() {
     if (!event && !isLoading) return null;
 
     return (
-        <div className="max-w-screen-lg m-auto w-full grid grid-cols-1 md:grid-cols-3 grow mt-8 gap-8 p-4">
+        <div className="max-w-screen-lg m-auto w-full grid grid-cols-1 md:grid-cols-3 grow mt-16 md:mt-8 gap-8 p-4">
             {!isLoading && event ? (
                 <EventCard
                     key={event.eventId}
