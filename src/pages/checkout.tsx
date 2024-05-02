@@ -61,10 +61,10 @@ function Checkout() {
     );
 
     useEffect(() => {
-        if (!eventId || tickets.length <= 0) {
+        if (!eventId || (tickets.length <= 0 && !email)) {
             navigate(paths.event.path);
         }
-    }, [eventId, navigate]);
+    }, [eventId, navigate, tickets]);
 
     if (checkout.isSuccess) {
         return (
